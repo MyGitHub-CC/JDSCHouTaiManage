@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.CategoryDao">
+
+	<select id="search"  resultType="entity.Category" >
+		select * from category
+		<if test="conditionCategory.name != null and !'null'.equals(conditionCategory.name) and conditionCategory.name != '' ">
+			where name like '%${conditionCategory.name}%' 
+		</if>
+		 limit #{begin},5
+	</select>
+	
+	<select id="searchAll" resultType="entity.Category" >
+		select * from category 
+	</select>
+	
+	<select id="searchCount" parameterType="entity.Category"  resultType="java.lang.Integer" >
+		select count(id) as n from category 
+		<if test="name != null and name!= '' and !'null'.equals(name) ">
+			where name like '%${name}%' 
+		</if>
+	</select>
+	
+	<select id="searchById" resultType="entity.Category">
+		select * from category where id=#{carteId}
+	</select>
+	
+	<insert id="insert" parameterType="entity.Category">
+		insert into category (name) values (#{name})
+	</insert>
+	
+	<update id="update" parameterType="entity.Category" >
+		update category set name=#{name} where id=#{id}
+	</update>
+	
+	<delete id="delete" >
+		delete from category where id = #{0}
+	</delete>
+</mapper> 
+    

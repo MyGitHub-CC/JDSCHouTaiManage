@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.UserDao">
+
+	<select id="searchByCondition" resultType="entity.User" >
+		select * from users where 1=1 
+		<if test=" conditionUser.username != null and !'null'.equals(conditionUser.username) and conditionUser.username != ''" >
+			and	username like '%${conditionUser.username}%' 
+		</if>
+		<if test=" conditionUser.phone != null and !'null'.equals(conditionUser.phone) and conditionUser.phone != ''" >
+			and	phone = #{conditionUser.phone} 
+		</if>
+		<if test=" conditionUser.address != null and !'null'.equals(conditionUser.address) and conditionUser.address != ''" >
+			and	address = #{conditionUser.address} 
+		</if>
+		  limit #{begin},5 
+	</select>
+	
+	<select id="searchCount" resultType="java.lang.Integer" >
+		select count(*) as n from users where 1 = 1 
+		<if test=" conditionUser.username != null and !'null'.equals(conditionUser.username) and conditionUser.username != ''" >
+			and	username like '%${conditionUser.username}%' 
+		</if>
+		<if test=" conditionUser.phone != null and !'null'.equals(conditionUser.phone)  and conditionUser.phone != ''" >
+			and	phone = #{conditionUser.phone} 
+		</if>
+		<if test=" conditionUser.address != null and !'null'.equals(conditionUser.address) and conditionUser.address != ''" >
+			and	address = #{conditionUser.address} 
+		</if>
+	</select>
+	
+	<select id="searchById" resultType="entity.User" >
+		select * from users where id = #{uId} 
+	</select>
+	
+	<insert id="insert"  parameterType="entity.User" >
+		insert into users (username,password,phone,address) 
+		values (#{username},#{password},#{phone},#{address})
+	</insert>
+	
+	<update id="update"  parameterType="entity.User" >
+		update users set username=#{username}, password=#{password},phone=#{phone}
+		,address=#{address} where id=#{id}
+	</update>
+	
+	<delete id="delete">
+		delete from users where id=#{uId}
+	</delete>
+	
+</mapper> 
+    

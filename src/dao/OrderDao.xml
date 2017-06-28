@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.OrderDao">
+
+	<select id="search" resultMap="search" >
+		SELECT u.id as uId, u.username,u.phone,u.address ,pro.id as proId,pro.name as proName,pro.price
+		,m.num,ord.id as ordId,ord.orderNum,ord.payment,ord.send 
+ 		FROM orders as ord INNER JOIN m_pro_order as m on ord.id = m.order_id 
+ 		INNER JOIN product as pro on pro.id=m.pro_id INNER JOIN users as u on u.id=ord.u_id where 1=1
+ 		<if test="order.orderNum != null  and !'null'.equals(order.orderNum) and order.orderNum != '' ">
+			and ord.orderNum = #{order.orderNum} 		
+ 		</if>
+ 		<if test="order.user.username != null  and !'null'.equals(order.user.username) and order.user.username != '' ">
+			and u.username like '%${order.user.username}%' 		
+ 		</if>
+ 		limit #{begin},5
+	</select>
+	<resultMap type="entity.Order" id="search">
+		<id property="id" column="ordId"></id>
+		<result property="orderNum" column="orderNum"></result>
+		<result property="payment" column="payment"></result>
+		<result property="send" column="send"></result>
+		<association property="product" column="pro_id"  javaType="entity.Product">
+			<id property="id" column="proId"></id>
+			<result property="name" column="proName"></result>
+		    <result property="price" column="price"></result>
+			<result property="num" column="num"></result>
+		</association>
+		<association property="user" column="u_id"  javaType="entity.User">
+			<id property="id" column="uId"></id>
+			<result property="username" column="username"></result>
+			<result property="phone" column="phone"></result>
+			<result property="address" column="address"></result>
+		</association>
+	</resultMap>
+	
+	<select id="searchCount"  resultType="int">
+		select count(*) as n from orders as ord inner join users as u on ord.u_id=u.id where 1=1 
+		<if test="order.orderNum != null and !'null'.equals(order.orderNum) and order.orderNum != '' ">
+			and orderNum = #{order.orderNum} 		
+ 		</if>
+ 		<if test="order.user.username != null and !'null'.equals(order.user.username) and order.user.username != '' ">
+			and u.username like '%${order.user.username}%' 		
+ 		</if>
+	</select>
+	
+	<delete id="delete">
+		delete from orders where id = #{orderId} 
+	</delete>
+	
+	<delete id="deleteMProAndOrder">
+		delete from m_pro_order where order_id = #{orderId} 
+	</delete>
+	
+</mapper> 
+    

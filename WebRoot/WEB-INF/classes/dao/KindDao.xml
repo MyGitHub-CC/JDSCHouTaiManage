@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.KindDao">
+	
+<select id="search" resultMap="search" >
+	select k.*,c.id as cId,c.name as cName from kind as k left join 
+	 category as c on k.c_id=c.id  where 1 = 1 
+	 <if test="conditionKind.name != null and conditionKind.name != '' ">
+	 	and  k.name like '%${conditionKind.name}%' 
+	 </if> 
+	 <if test="conditionKind.category != null and conditionKind.category.id > 0 ">
+	 	and c.id = #{conditionKind.category.id}
+	 </if> 
+	 limit #{begin},5
+</select>
+<resultMap type="entity.Kind" id="search" >
+	<id property="id" column="id" ></id>
+	<result property="name" column="name" ></result>
+	<association property="category" column="c_id"  javaType="entity.Category">
+		<id property="id" column="cId" ></id>
+		<result property="name" column="cName"></result>
+	</association>
+</resultMap>
+	
+<select id="searchCount" resultType="java.lang.Integer" >
+	select count(id) as n from kind where 1 = 1 
+	<if test="conditionKind.name != null and conditionKind.name !='' ">
+		and name like '%${conditionKind.name}%'
+	</if>
+	 <if test="conditionKind.category != null and conditionKind.category.id > 0 ">
+		and c_id = #{conditionKind.category.id}
+	 </if> 
+</select>
+
+<insert id="insert" parameterType="entity.Kind">
+	insert into kind (name,c_id) values (#{name},#{category.id})
+</insert>
+
+<select id="searchById" resultMap="searchById" >
+	select k.*,c.id as cId,c.name as cName from kind as k left join category as c on k.c_id=c.id where k.id=#{0}
+</select>
+<resultMap type="entity.Kind" id="searchById">
+	<id property="id" column="id" ></id>
+	<result property="name" column="name" ></result>
+	<association property="category" column="c_id"  javaType="entity.Category">
+		<id property="id" column="cId" ></id>
+		<result property="name" column="cName"></result>
+	</association>
+</resultMap>
+
+<select id="searchByCId" resultType="entity.Kind" >
+	select * from kind where 1=1
+	<if test="cId > 0">
+		and c_id=#{cId}
+	</if>
+</select>
+
+<update id="update" parameterType="entity.Kind" >
+	update kind set name=#{name} ,c_id=#{category.id} where id=#{id}
+</update>
+
+<delete id="delete" >
+	delete from kind where id=#{0}
+</delete>
+</mapper> 
+    

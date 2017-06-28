@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.ProductDao">
+
+	<select id="search" resultMap="search" >
+		select pro.*,pub.id as pubId,pub.name as pubName from product as pro LEFT JOIN 
+		 publishing as pub on pro.pub_id = pub.id where 1 = 1 
+		<if test="kId > 0">
+			and k_id = #{kId}
+		</if>
+		<if test="conditionProduct.name != null and conditionProduct.name != 'null' and conditionProduct.name!= '' ">
+		  and  pro.name like '%${conditionProduct.name}%'
+		</if>
+		 limit #{begin}, 5
+	</select>
+	<resultMap type="entity.Product" id="search">
+		<id property="id" column="id" ></id>
+		<result property="name" column="name" ></result>
+		<result property="author" column="author" ></result>
+		<result property="price" column="price" ></result>
+		<result property="repertory" column="repertory" ></result>
+		<result property="photo" column="photo" ></result>
+		<result property="introduce" column="introduce" ></result>
+		<association property="publishing" column="pub_id"  javaType="entity.Publishing">
+			<id property="id" column="pubId" ></id>
+			<result property="name" column="pubName" ></result>
+		</association>
+	</resultMap>
+	
+	<select id="searchPublishing" resultType="entity.Publishing" >
+		select * from publishing
+	</select>
+	
+	<select id="searchById" resultMap="searchById" >
+		select pro.*,pub.id as pubId,pub.name as pubName from product as pro LEFT JOIN 
+		 publishing as pub on pro.pub_id = pub.id where pro.id = #{0}
+	</select>
+	<resultMap type="entity.Product" id="searchById">
+		<id property="id" column="id" ></id>
+		<result property="name" column="name" ></result>
+		<result property="author" column="author" ></result>
+		<result property="price" column="price" ></result>
+		<result property="repertory" column="repertory" ></result>
+		<result property="photo" column="photo" ></result>
+		<result property="introduce" column="introduce" ></result>
+		<result property="kind.id" column="k_id" ></result>
+		<association property="publishing" column="pub_id"  javaType="entity.Publishing">
+			<id property="id" column="pubId" ></id>
+			<result property="name" column="pubName" ></result>
+		</association>
+	</resultMap>
+	
+	<select id="searchCount" resultType="java.lang.Integer" >
+		select count(id) as n from product  where 1 = 1 
+		<if test="kId > 0">
+		  and  k_id = #{kId}
+		</if>
+		<if test="conditionProduct.name != null and conditionProduct.name != 'null' and conditionProduct.name!= '' ">
+		  and name like '%${conditionProduct.name}%'
+		</if>
+	</select>
+	
+	<insert id="insert" >
+		insert into product(name, price, repertory,photo,introduce,author,pub_id,k_id) 
+		 values (#{name},#{price},#{repertory},#{photo},#{introduce},#{author},#{publishing.id},#{kind.id})
+	</insert>
+	
+	<update id="update"  >
+		update product set name=#{name}, price=#{price}, repertory=#{repertory}, photo=#{photo}
+		, introduce=#{introduce}, author=#{author}, pub_id=#{publishing.id}
+		, k_id=#{kind.id} where id = #{id}
+	</update>
+	
+	<delete id="delete" >
+		delete from product where id=#{proId}
+	</delete>
+	
+</mapper> 
+    
