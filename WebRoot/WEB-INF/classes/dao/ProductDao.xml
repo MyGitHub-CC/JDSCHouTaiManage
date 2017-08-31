@@ -64,8 +64,8 @@
 	</select>
 	
 	<insert id="insert" >
-		insert into product(name, price, repertory,photo,introduce,author,pub_id,k_id) 
-		 values (#{name},#{price},#{repertory},#{photo},#{introduce},#{author},#{publishing.id},#{kind.id})
+		insert into product(name, price, repertory,photo,introduce,author,pub_id,k_id,c_id) 
+		 values (#{name},#{price},#{repertory},"5.jpg",#{introduce},#{author},#{publishing.id},#{kind.id},14)
 	</insert>
 	
 	<update id="update"  >

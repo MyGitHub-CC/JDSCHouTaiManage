@@ -101,10 +101,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<th>订单id</th>
 						<th>用户名</th>
 						<th>联系电话</th>
-						<th>联系地址</th>
-						<th>商品名称</th>
-						<th>商品价格</th>
-						<th>商品数量</th>
+<!-- 						<th>联系地址</th> -->
+<!-- 						<th>商品名称</th> -->
+<!-- 						<th>商品价格</th> -->
+<!-- 						<th>商品数量</th> -->
 						<th style="width:220px;">订单号</th>
 						<th>付款状态</th>
 						<th>送货状态</th>
@@ -118,10 +118,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<td><%=order.getId() %></td>
 						<td><%=order.getUser().getUsername() %></td>
 						<td><%=order.getUser().getPhone() %></td>
-						<td><%=order.getUser().getAddress() %></td>
-						<td><%=order.getProduct().getName() %></td>
-						<td><%=order.getProduct().getPrice() %></td>
-						<td><%=order.getProduct().getNum() %></td>
+<!-- 						<td><%=order.getUser().getAddress() %></td> -->
+<!-- 						<td><%=order.getProduct().getName() %></td> -->
+<!-- 						<td><%=order.getProduct().getPrice() %></td> -->
+<!-- 						<td><%=order.getProduct().getNum() %></td> -->
 						<td><%=order.getOrderNum() %></td>
 						<%
 							String payment = "";
@@ -188,6 +188,77 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 	删除
 				 </button> 
 			</div>
+			
+			 <a id="modal-186797" href="#modal-container-186797" role="button" class="btn" data-toggle="modal">.</a>
+			<div class="modal fade" id="modal-container-186797" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog" style="width:1000px;">
+					<div class="modal-content">
+						<div class="modal-header">
+							 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							<h4 class="modal-title" id="myModalLabel">
+								订单详情：
+							</h4>
+						</div>
+						<div class="modal-body">
+							<div id="msg">
+								<table class="table table-bordered table-hover table-condensed  table-striped">
+									<thead>
+										<tr class="info">
+											<th>订单id</th>
+											<th>用户名</th>
+											<th>联系电话</th>
+											<th>联系地址</th>
+											<th>商品名称</th>
+											<th>商品价格</th>
+											<th>商品数量</th>
+											<th style="width:220px;">订单号</th>
+											<th>付款状态</th>
+											<th>送货状态</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+											Order order = orders.get(0);
+										%>
+										<tr class="td" >
+											<td><%=order.getId() %></td>
+											<td><%=order.getUser().getUsername() %></td>
+											<td><%=order.getUser().getPhone() %></td>
+											<td><%=order.getUser().getAddress() %></td>
+											<td><%=order.getProduct().getName() %></td>
+											<td><%=order.getProduct().getPrice() %></td>
+											<td><%=order.getProduct().getNum() %></td>
+											<td><%=order.getOrderNum() %></td>
+											<%
+												String payment = "";
+												String send = "";
+												if(order.getPayment() == 0){
+													payment = "未付款";
+												}else if(order.getPayment() == 1) {
+													payment = "已付款";
+												}
+												if(order.getSend() == 0){
+													send = "未发货";
+												}else if(order.getPayment() == 1) {
+													send = "已发货";
+												}else if(order.getPayment() == 1) {
+													send = "已完成";
+												}
+											 %>
+											<td><%=payment %></td>
+											<td><%=send %></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="modal-footer">
+							 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> <button type="button" class="btn btn-primary">保存</button>
+						</div>
+					</div>
+				</div>
+			
+			
 		</div>
 	 </div>
   </body>
